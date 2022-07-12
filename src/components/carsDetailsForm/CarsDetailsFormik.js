@@ -34,6 +34,9 @@ import { useToast } from 'react-native-fast-toast'
 import ToastService from '../../services/toast.service';
 import ErrorMessage from '../formik/ErrorValidation';
 import { validationSchema } from '../formik/Schema';
+import axios from 'axios';
+import { AsyncStorage } from 'react-native';
+
 // import * as yup from 'yup'
 
 function CarsDetailsFormik(props) {
@@ -61,6 +64,9 @@ function CarsDetailsFormik(props) {
     const toast = useToast()
     const [countNumParking, setCountNumParking] = useState(0);
     const [progressAddNewCar, setProgressAddNewCar] = useState(false);
+    const usersLink = "http://10.0.0.3:8000/users/";
+    const [isNoCar, setNoCar] = useState(false);
+    const [roofedParking, setRoofedParking] = useState(false);
 
     const setCheckBoxFunc = () => {
         setCheckBox(!checkBox)
@@ -77,7 +83,40 @@ function CarsDetailsFormik(props) {
     //         .required('Password is required'),
     // })
 
-    const countionueFunc = () => {
+    const countionueFunc = async () => {
+        try {
+            var data = await axios.post(usersLink, {
+                name: formValues.firstName + " " + formValues.lastName,
+                email: formValues.email,
+                phone: "0546670834",
+                veihcles_ids: [formValues.carNum],
+                assets_ids: [props.route.params]
+            })
+            data = data.data;
+            try {
+                await AsyncStorage.setItem(
+                    'name',
+                    data.name
+                );
+                console.log(`*********************************** save on stroage ${data.name} **********************`)
+            } catch (error) {
+                console.log("Errorr stroage set ")
+                //Error saving data
+            }
+            try {
+                await AsyncStorage.setItem(
+                    'phone',
+                    data.phone
+                );
+                console.log("WE GOT INTO ASYNC STORAGE")
+            } catch (error) {
+                // Error saving data
+            }
+
+        }
+        catch (err) {
+            console.log(err);
+        }
         navigateScreen(props, 'AuthCarDetailsBeforeContinue', formValues)
     }
 
@@ -237,10 +276,9 @@ function CarsDetailsFormik(props) {
                             selectionColor="#FFFFFF99"
                             ref={el => inputsRef[2] = el}
                         />
-                        <View style={styles.rowDirection}>
-                            <View style={styles.leftItem}>
+                        <View style={[styles.rowDirection, { justifyContent: 'flex-end' }]}>
+                            {!isNoCar && <View style={[{ width: '60%' }]}>
                                 <TextInput
-                                    editable={checkBox ? false : true}
                                     onChangeText={(txt) => setFormValuesFunc('carKind', txt)}
                                     value={formValues.carKind}
                                     style={styles.input}
@@ -249,8 +287,8 @@ function CarsDetailsFormik(props) {
                                     selectionColor="#FFFFFF99"
                                     ref={el => inputsRef[3] = el}
                                 />
-                            </View>
-                            <View style={styles.rightItem}>
+                            </View>}
+                            <View style={[{ width: '40%' }]}>
                                 <TextInput
                                     onChangeText={(txt) => setFormValuesFunc('apartmentNum', txt)}
                                     value={formValues.apartmentNum}
@@ -262,7 +300,7 @@ function CarsDetailsFormik(props) {
                                 />
                             </View>
                         </View>
-                        <TextInput
+                        {!isNoCar && <TextInput
                             editable={checkBox ? false : true}
                             onChangeText={(txt) => setFormValuesFunc('carNum', txt)}
                             value={formValues.carNum.toString()}
@@ -273,8 +311,8 @@ function CarsDetailsFormik(props) {
                             selectionColor="#FFFFFF99"
                             placeholderTextColor={'#FFFFFF99'}
                             ref={el => inputsRef[5] = el}
-                        />
-                        <ScrollView style={{ maxHeight: '38%' }}
+                        />}
+                        <ScrollView
                             ref={scrollViewRef}
                             onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
                         >
@@ -323,9 +361,9 @@ function CarsDetailsFormik(props) {
                             </Text>
                             <Switch
                                 trackColor={{ false: '#374563', true: '#FFC803' }}
-                            // onValueChange={toggleSwitchHourlyParking}
-                            // value={switchHourlyParking}
-                            // thumbColor={switchHourlyParking ? 'black' : '#FFFFFF'}
+                                onValueChange={setRoofedParking}
+                                value={roofedParking}
+                                thumbColor={roofedParking ? 'black' : '#FFFFFF'}
                             />
 
                         </View>
@@ -336,9 +374,9 @@ function CarsDetailsFormik(props) {
                             </Text>
                             <Switch
                                 trackColor={{ false: '#374563', true: '#FFC803' }}
-                            // onValueChange={toggleSwitchHourlyParking}
-                            // value={switchHourlyParking}
-                            // thumbColor={switchHourlyParking ? 'black' : '#FFFFFF'}
+                                onValueChange={setNoCar}
+                                value={isNoCar}
+                                thumbColor={isNoCar ? 'black' : '#FFFFFF'}
                             />
                         </View>
                         {/* <View

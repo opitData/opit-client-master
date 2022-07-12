@@ -52,6 +52,7 @@ import UsersList from '../components/settings/administratorPrivileges/UsersList'
 import AddUsers from '../components/settings/administratorPrivileges/AddUsers';
 import SerialNumber from '../components/signUp/SerialNumber';
 import CarDetailsForm from '../components/carsDetailsForm/CarsDetailsForm'
+import GateMain from '../components/gate/GateMain';
 
 const Stack = createNativeStackNavigator();
 
@@ -65,18 +66,6 @@ export const goBack = (props) => {
 }
 
 const addStaticBackground = (props, Component) => {
-    return (
-        <>
-            <SafeAreaView
-                style={styles.background}>
-                <Component {...props} />
-            </SafeAreaView>
-            <Footer {...props} />
-        </>
-    )
-}
-
-const HomePage = (props, Component) => {
     return (
         <>
             <SafeAreaView
@@ -97,18 +86,13 @@ export const RoutesApp = (props) => {
                 }}
                 initialRouteName="WrapHome"
             >
+
                 <Stack.Screen
                     name="Home"
                     component={
-                        (props) => HomePage(props, SerialNumber)
+                        (props) => addStaticBackground(props, Home)
                     } />
 
-                <Stack.Screen
-                    name="Registration"
-                    component={
-                        (props) => addStaticBackground(props, CarDetailsForm )
-                    } />
-                    
 
                 <Stack.Screen
                     name="RequestParkingList"
@@ -150,7 +134,7 @@ export const RoutesApp = (props) => {
                 <Stack.Screen
                     name="Gate"
                     component={
-                        (props) => addStaticBackground(props, Gate)
+                        (props) => addStaticBackground(props, GateMain)
                     }
                 />
                 <Stack.Screen
@@ -264,14 +248,25 @@ export const Routes = () => {
                     screenOptions={{
                         headerShown: false
                     }}
-                    initialRouteName="WrapHome"
+                    initialRouteName="FirstScreen"
                 >
+
+
                     <Stack.Screen
-                        name="CarsDetailsForm"
+                        name="SerialNumber"
+                        component={
+                            (props) => addStaticBackground(props, SerialNumber)
+                        } />
+
+
+                    <Stack.Screen
+                        name="Registration"
                         component={
                             (props) => addStaticBackground(props, CarsDetailsForm)
                         }
                     />
+
+
                     <Stack.Screen
                         name="WrapSettings"
                         component={

@@ -1,12 +1,13 @@
 import React from 'react';
 import Footer from './Footer';
-import {RoutesApp} from '../../routes/routes';
+import { Routes, RoutesApp } from '../../routes/routes';
+import axios from 'axios';
 
 export default props => {
   return (
     <>
       <RoutesApp />
-      {/* <Footer {...props} /> */}
+      <Footer {...props} />
     </>
   );
 };

@@ -10,7 +10,7 @@ class Animations extends Component {
 
     componentWillMount = () => {
         this.animatedWidth = new Animated.Value(0)
-        this.animatedHeight = new Animated.Value(0)
+        this.animatedHeight = new Animated.Value(2)
     }
 
     render() {
@@ -21,13 +21,13 @@ class Animations extends Component {
                     Animated.timing(this.animatedWidth, {
                         toValue: 200,
                         duration: 2300
-                    }).start(),
-                    Animated.timing(this.animatedHeight, {
-                        toValue: 8,
-                        duration: 500,
-                    }).start(() => {
+                    }).start()
+                    // Animated.timing(this.animatedHeight, {
+                    //     toValue: 8,
+                    //     duration: 500,
+                    // }).start(() => {
 
-                    })
+                    // })
                 }
 
                 <View style={styles.container}>
@@ -46,13 +46,11 @@ const styles = StyleSheet.create({
         // width: 200,
         // height: 8,
         backgroundColor: "#007FFF",
-        borderRadius: 5,
+        borderRadius: 0,
         marginTop: 8
     },
     oplit: {
-        borderRadius: 5,
+        borderRadius: 0,
         backgroundColor: 'white',
-        width: 50,
-        height: 100
     }
 })

@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { connect, useSelector } from 'react-redux';
 import DeleteCarDialog from '../dialog/DeleteCar.dialog';
 import {
@@ -26,14 +26,17 @@ import AnimatedView from '../genericComponents/AnimatedView';
 import Star from '../../assets/svg/star.svg'
 import T from '../genericComponents/T';
 import axios from 'axios';
+import { AsyncStorage } from 'react-native'
+
 function ParkingForNewGuest(props) {
     const { t } = useTranslation();
     const txt1 = 'parkingForNewGuest'.toString();
     const txt2 = 'reservedParkingsList'.toString();
     const emptyParking = 'emptyParkings'.toString();
     const gateLink = "http://10.0.0.3:8000/GateOperation/";
-    const [carNumber , setCarNumber] = useState("")
-    const [fromDay , setFromDay] = useState("0")
+    const usersLink = "http://10.0.0.3:8000/users/";
+    const [carNumber, setCarNumber] = useState("")
+    const [fromDay, setFromDay] = useState("0")
     const {
         _parkingRequest,
         setOpenDialog,
@@ -42,61 +45,72 @@ function ParkingForNewGuest(props) {
         saveParkingForGuest
     } = props;
     const inputList = [
-         {
-             placeholder: t(`${txt1}.name`),
-           
+        {
+            placeholder: t(`${txt1}.name`),
+
         },
-         {
-             placeholder: t(`${txt1}.carKind`),   
-         },    
+        {
+            placeholder: t(`${txt1}.carKind`),
+        },
         {
             placeholder: t(`${txt1}.carId`),
         },
     ]
-     
+
     const addGuest = async () => {
         let req_start_time = _parkingRequest.startTime
-        let req_end_time = _parkingRequest.endTime 
+        let req_end_time = _parkingRequest.endTime
 
         const d = new Date();
-        let date1 = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), req_start_time, '00', '00'))
+        console.log(d.getDate() + _parkingRequest.day);
+        let date1 = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate() + _parkingRequest.day, req_start_time, '00', '00'))
         let date2 = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), req_end_time, '00', '00'))
         let timeStamp1 = date1.getTime() / 1000;
         let timeStamp2 = date2.getTime() / 1000;
-        
-        var body ={  
-        entryDateTime : timeStamp1.toString(),
-        exitDateTime : timeStamp2.toString(),
-        plateNumber: carNumber
+
+        var body = {
+            entryDateTime: timeStamp1.toString(),
+            exitDateTime: timeStamp2.toString(),
+            plateNumber: carNumber
         };
 
-        await axios.put() //לזהות איזה דייר משתמש במכשיר
+        const PHONE = await AsyncStorage.getItem('phone');
+        let res = await axios.post(usersLink);
+        let users = res.data
+        users.forEach(async (user) => {
+            if (user.phone == PHONE) {
+                let guests = user.guests
+                guests.push(carNumber);
+                await axios.put(usersLink + user._id, { ...user, guests: guests })
+            }
+        })
         await axios.post(gateLink, body);
 
-    //   let res = await axios.get(gateLink)
-    //   let guestsList = res.data  
-    //   if( guestsList.length > 0){
-    //     let newGuestList = guestsList[0]
-    //     newGuestList.push(body)
-    //     console.log(newGuestList)
-    //     await axios.put(gateLink + guestsList[0]._id , newGuestList)
-    //   }
-    //  else await axios.post(gateLink,[body]);
-     
+
+        //   let res = await axios.get(gateLink)
+        //   let guestsList = res.data  
+        //   if( guestsList.length > 0){
+        //     let newGuestList = guestsList[0]
+        //     newGuestList.push(body)
+        //     console.log(newGuestList)
+        //     await axios.put(gateLink + guestsList[0]._id , newGuestList)
+        //   }
+        //  else await axios.post(gateLink,[body]);
+
     }
-   
+
     const buttons = <Row style={_styles().btnRow}>
         <Button
             content={t(`${txt1}.btn1`)}
             width={140}
-            handlePress ={() => addGuest()}
-            
-           /* handlePress={() => {
-                setVisible(false)
-               /* setOpenDialog(true)
-                saveParkingForGuest()
-                
-            }}*/
+            handlePress={() => addGuest()}
+
+        /* handlePress={() => {
+             setVisible(false)
+            /* setOpenDialog(true)
+             saveParkingForGuest()
+             
+         }}*/
         />
         <Button
             kind="outline"
@@ -108,8 +122,8 @@ function ParkingForNewGuest(props) {
     </Row>
     const textInput = ({ item }) => <TextInput
         style={[styles.input, _styles().input]}
-        placeholder={item.placeholder} 
-        onChangeText = {text => setCarNumber(text)}  
+        placeholder={item.placeholder}
+        onChangeText={text => setCarNumber(text)}
         placeholderTextColor={'#FFFFFF99'}
         selectionColor="#FFFFFF99"
     />
@@ -121,7 +135,7 @@ function ParkingForNewGuest(props) {
                 <Row >
                     <T
                         style={_styles().txt}
-                        text={t(`${txt2}.fromDay`) + _selectedParking.fromDay}  
+                        text={t(`${txt2}.fromDay`) + _selectedParking.fromDay}
                     />
                     {/* <Text style={_styles().txt}>{t(`${txt2}.fromDay`) + _selectedParking.fromDay}</Text> */}
                 </Row>
@@ -201,19 +215,19 @@ function ParkingForNewGuest(props) {
                     <T
                         style={_styles().title}
                         text={t(`${txt1}.title`)}
-                        onChangeText={newText => ToastAndroid.show(newText,10)}
-                       
+                        onChangeText={newText => ToastAndroid.show(newText, 10)}
+
                     />
                     {/* <Text style={_styles().title}>
                         {t(`${txt1}.title`)}
                     </Text> */}
                     <FlatList
                         style={{ width: '100%' }}
-                        data={inputList}      
-                      
+                        data={inputList}
+
                         renderItem={textInput}
                         scrollEnabled={false}
-                        
+
 
                     />
                     <AnimatedView>
@@ -228,13 +242,15 @@ function ParkingForNewGuest(props) {
         </>
     )
 }
-const mapStateToProps = state => {return {
-    ...state,
-    _guestsList: state.guests.guestsList,
-    _selectedGuest: state.guests.selectedGuest,
-    _parkingRequest: state.properties.parkingRequest,
-    _selectedParking: state.parkings.selectedParking
-}}
+const mapStateToProps = state => {
+    return {
+        ...state,
+        _guestsList: state.guests.guestsList,
+        _selectedGuest: state.guests.selectedGuest,
+        _parkingRequest: state.properties.parkingRequest,
+        _selectedParking: state.parkings.selectedParking
+    }
+}
 
 const mapDispatchToProps = dispatch => ({
     _setSelectedGuest: (item) => dispatch(actions.setSelectedGuest(item)),

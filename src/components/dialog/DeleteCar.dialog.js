@@ -6,6 +6,7 @@ import {
 import styles from '../../styles/Styles';
 import { useTranslation } from 'react-i18next';
 import Dialog from '../dialog/Dialog';
+import T from '../genericComponents/T';
 
 export default (props) => {
 

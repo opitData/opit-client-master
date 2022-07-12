@@ -27,7 +27,7 @@ export default (props) => {
         return { width: width }
     }
     const paymentsStage2 = 'paymentsStage2'.toString();
-
+    console.log(props);
     return (
         <>
             <AnimatedView>

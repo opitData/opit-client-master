@@ -53,7 +53,18 @@ export const headerWithTitle = (fontSize) => {
 export const returnDarkBtn = (width, height) => {
     return {
         width: width ? width : '90%',
-        height: 50,
+        height: height == 0 ? '0%' : 50,
+        backgroundColor: darkBtn,
+        borderRadius: 5,
+        alignSelf: 'center',
+        marginTop: 15
+    }
+}
+
+export const returnGrayButton = (width, height) => {
+    return {
+        width: width ? width : '90%',
+        height: height,
         backgroundColor: darkBtn,
         borderRadius: 5,
         alignSelf: 'center',

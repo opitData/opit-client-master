@@ -3,7 +3,8 @@ import {
     TouchableOpacity,
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    ScrollView
 } from 'react-native';
 import ArrowBack from '../../assets/arrowBack.svg';
 import styles from '../../styles/Styles';
@@ -47,15 +48,17 @@ function CarsDetailsForm(props) {
             <Text style={styles.title}>
                 {t(`${createUserParking}.title`)}
             </Text>
-            <CarsDetailsFormik
-                {...props}
-                formValues={formValues}
-                setCntParkingsFunc={setCntParkingsFunc}
-                setFormValues={setFormValues}
-                setFormValuesFunc={setFormValuesFunc}
-                checkBox={checkBox}
-                setCheckBox={setCheckBox}
-            />
+            <ScrollView>
+                <CarsDetailsFormik
+                    {...props}
+                    formValues={formValues}
+                    setCntParkingsFunc={setCntParkingsFunc}
+                    setFormValues={setFormValues}
+                    setFormValuesFunc={setFormValuesFunc}
+                    checkBox={checkBox}
+                    setCheckBox={setCheckBox}
+                />
+            </ScrollView>
         </>
     )
 }

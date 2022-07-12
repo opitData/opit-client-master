@@ -60,8 +60,8 @@ function Parkings(props) {
     const parking = 'parking'.toString();
     const { t } = useTranslation();
     const txt = 'requestParking'.toString();
-    const [switchHourlyParking, setSwitchHourlyParking] = useState(initHourlyParking())
-    const [switchDailyParking, setSwitchDailyParking] = useState(initdailyParking())
+    const [switchHourlyParking, setSwitchHourlyParking] = useState(initHourlyParking());
+    const [switchDailyParking, setSwitchDailyParking] = useState(initdailyParking());
     const [closeDialog, setCloseDialog] = useState(false);
     const [pressedBtn, setPressedBtn] = useState('');
     const [openSendDialog, setOpenSendDialog] = useState(false);

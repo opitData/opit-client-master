@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Header from '../header/Header';
 import {
   PixelRatio,
@@ -8,27 +8,27 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {languages} from '../../i18/languageList';
+import { languages } from '../../i18/languageList';
 import Notification from '../../assets/svg/notification.svg';
 import Row from '../genericComponents/Row';
-import {useTranslation} from 'react-i18next';
-import {dominantLight, ligthDominant} from '../../styles/SystemColor';
-import {Bold} from '../../styles/SystemFonts';
+import { useTranslation } from 'react-i18next';
+import { dominantLight, ligthDominant } from '../../styles/SystemColor';
+import { Bold } from '../../styles/SystemFonts';
 import Gate from '../../assets/svg/gate.svg';
 import P from '../../assets/svg/p.svg';
 import Parking24h from '../../assets/svg/parking24h.svg';
 import Calendar from '../../assets/svg/calendar.svg';
 import StyleFuncs from '../../styles/StyleFuncs';
 import DropDown from '../dropdwon/DropDown';
-import {navigateScreen} from '../../routes/routes';
-import styles, {headerWithTitle} from '../../styles/Styles';
-import {connect} from 'react-redux';
+import { navigateScreen } from '../../routes/routes';
+import styles, { headerWithTitle } from '../../styles/Styles';
+import { connect } from 'react-redux';
 import actions from '../../redux/actions';
-import {returnTitle} from '../genericComponents/GenericFunctions';
+import { returnTitle } from '../genericComponents/GenericFunctions';
 import T from '../genericComponents/T';
 function Home(props) {
-  const {_propertiesList, _emptyParkingList, _tab, _setTab} = props;
-  const {t, i18n} = useTranslation();
+  const { _propertiesList, _emptyParkingList, _tab, _setTab } = props;
+  const { t, i18n } = useTranslation();
   const home = 'home'.toString();
   const [activeDailyParking, setActiveDailyParking] = useState(false);
   const [activeHourlyParking, setActiveHourlyParking] = useState(false);
@@ -69,7 +69,7 @@ function Home(props) {
         }
       />
       <ScrollView>
-        <View style={{paddingTop: 10}}>
+        <View style={{ paddingTop: 10 }}>
           <DropDown array={_propertiesList} txtNote={true} />
         </View>
         <TouchableOpacity
@@ -104,7 +104,7 @@ function Home(props) {
 
         <TouchableOpacity
           onPress={() => {
-            navigateScreen(props, 'EmptyParkings', {tab: 'Parkings'});
+            navigateScreen(props, 'EmptyParkings', { tab: 'Parkings' });
           }}
           style={StyleFuncs.returnDarkBtnStyle()}>
           <Row style={_styles().row}>
@@ -133,7 +133,7 @@ function Home(props) {
             ]}
             // onPress={activeHourlyParkingFunc}
             onPress={() =>
-              navigateScreen(props, 'Parkings', {switchHourlyParking: true})
+              navigateScreen(props, 'Parkings', { switchHourlyParking: true })
             }>
             <Parking24h width={40} height={40} />
             <T
@@ -149,7 +149,7 @@ function Home(props) {
               activeDailyParking && _styles().activeBorder,
             ]}
             onPress={() =>
-              navigateScreen(props, 'Parkings', {switchDailyParking: true})
+              navigateScreen(props, 'Parkings', { switchDailyParking: true })
             }>
             <Calendar width={40} height={40} />
             <T
@@ -163,7 +163,7 @@ function Home(props) {
         <TouchableOpacity
           style={StyleFuncs.returnDarkBtnStyle()}
           onPress={() => {
-            navigateScreen(props, 'ReservedParkingsList', {tab: 'Parkings'});
+            navigateScreen(props, 'ReservedParkingsList', { tab: 'Parkings' });
           }}>
           <Row style={_styles().row}>
             <T
