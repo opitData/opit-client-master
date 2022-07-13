@@ -16,11 +16,11 @@ import GateOpenSuccessDialog from '../dialog/GateOpenSuccess.dialog';
 import UnableToOpenGateDialog from '../dialog/ UnableToOpenGate.dialog';
 import { GatePic } from './GatePic';
 import Line from '../firstScreen/Line';
-import { View } from 'react-native';
+import { View, AsyncStorage } from 'react-native';
 
 
 const gateLink = "http://10.0.0.3:8000/gate/open";
-
+const assetsLink = "http://10.0.0.3:8000/assets";
 
 export default (props) => {
     const { t } = useTranslation();
@@ -38,7 +38,16 @@ export default (props) => {
     const openCam = 280;
 
     let compHeight, cam1Height, cam2Height;
-    // const openGate = async () => {
+
+
+    const openGate = async () => {
+        let pi_id = ""
+        let res =  await axios.get(assetsLink)
+        let assets = res.data
+        AsyncStorage.getItem('phone').then(async (phone) => {
+            assets.forEach((asset) => asset.users.ids.forEach((user) => {if(user == phone) pi_id = asset.pi_id} ) )
+        })
+        await axios.post(gateLink, pi_id)
     //     try {
     //         var data = await axios.get(gateLink);
     //         ToastAndroid.show("NEW" + data.data.message, 10);
@@ -48,8 +57,8 @@ export default (props) => {
     //         ToastAndroid.show("err", 4);
     //     }
 
-    //     // ToastAndroid.show('asdf sdf asdf', 4);
-    // }
+         // ToastAndroid.show('asdf sdf asdf', 4);
+    }
 
     {/* <Image
                     source={Gate1}
