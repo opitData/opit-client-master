@@ -40,14 +40,14 @@ export default (props) => {
     let compHeight, cam1Height, cam2Height;
 
 
-    const openGate = async () => {
+    const getPiID  = async () => {
         let pi_id = ""
         let res =  await axios.get(assetsLink)
         let assets = res.data
         AsyncStorage.getItem('phone').then(async (phone) => {
             assets.forEach((asset) => asset.users.ids.forEach((user) => {if(user == phone) pi_id = asset.pi_id} ) )
         })
-        await axios.post(gateLink, pi_id)
+       // await axios.post(gateLink, pi_id)
     //     try {
     //         var data = await axios.get(gateLink);
     //         ToastAndroid.show("NEW" + data.data.message, 10);
@@ -89,7 +89,9 @@ export default (props) => {
 
                     <TouchableOpacity style={[returnGrayButton('90%', isImage1Open ? openCam : '0%')]}>
                         <Image
-                            source={Gate1}
+                          // source={{uri: 'https://reactjs.org/logo-og.png'}}
+
+                           source={{uri:'http://10.0.0.3:8000/gate/sendmeimg/124'}}
                             style={[_styles().image, { height: isImage1Open ? undefined : '0%' }]}
                         />
                         <Row style={[{ justifyContent: 'center', marginTop: 20 }]}>
