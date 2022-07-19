@@ -33,15 +33,17 @@ export function AuthCarDetailsBeforeContinue(props) {
                 {...props}
                 headerRightElement={
                     <TouchableOpacity
-                        onPress={() => goBack(props
-                        )}>
+                        onPress={() => {
+                            console.log(props)
+                            goBack(props)
+                        }}>
                         <ArrowBack />
                     </TouchableOpacity>
                 }
             />
-            <Text style={styles.title}>
+            < Text style={styles.title} >
                 {i18.t(`${authCarDetailsBeforeContinue}.title`)}
-            </Text>
+            </Text >
 
             <View style={styles.placeCenter}>
                 <Text
@@ -49,7 +51,7 @@ export function AuthCarDetailsBeforeContinue(props) {
                 >
                     {t(`${authCarDetailsBeforeContinue}.details`)}
                     {" "}
-                    {3}
+                    {_countNumParking}
                 </Text>
 
                 <Button

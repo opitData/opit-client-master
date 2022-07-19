@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, ToastAndroid } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, ToastAndroid } from 'react-native';
 import HeaderWrapper from '../header/HeaderWrapper';
 import Camera from '../../assets/svg/camera.svg';
 import Gate1 from '../../assets/png/gate1.png';
@@ -21,32 +21,29 @@ export default (props) => {
         navigation
     } = props;
 
-   const openGate = async() => {
-       try{
-    var data = await axios.get(gateLink);
-    ToastAndroid.show("NEW" +data.data.message,10);
-       }
-       catch(err){
-           console.log(err);
-        ToastAndroid.show("err",4);
-       }
+    // const openGate = async () => {
+    //     try {
+    //         var data = await axios.get(gateLink);
+    //     }
+    //     catch (err) {
+    //         console.log(err);
+    //         ToastAndroid.show("err", 4);
+    //     }
+    // }
 
-    // ToastAndroid.show('asdf sdf asdf', 4);
-   }
-
-     return (
+    return (
         <>
             <HeaderWrapper
                 navigation={navigation}
                 title={t(`${txt}.title`)}
             />
             <ScrollView>
-                 <Image
+                <Image
                     source={Gate1}
                     style={[_styles().image]}
-                /> 
-               <TouchableOpacity 
-                    onPress = {openGate}
+                />
+                <TouchableOpacity
+                    onPress={openGate}
                     style={[returnDarkBtn(), styles.placeCenter]}>
                     <Row style={[styles.placeCenter]}>
                         {/* <Text style={[returnBoldTxt(20), { paddingHorizontal: 10 }]}>
@@ -66,15 +63,15 @@ export default (props) => {
                     source={Gate2}
                     style={[_styles().image]}
                 />
-                <TouchableOpacity  style={[returnDarkBtn(), styles.placeCenter]}>
+                <TouchableOpacity style={[returnDarkBtn(), styles.placeCenter]}>
                     <Row style={[styles.placeCenter]}>
                         {<Text style={[returnBoldTxt(20), { paddingHorizontal: 10 }]}>
                             {t(`${txt}.btn2`)}
                         </Text>}
                         <T
                             style={[returnBoldTxt(20), { paddingHorizontal: 10 }]}
-                           text={t(`${txt}.btn2`)}
-                    
+                            text={t(`${txt}.btn2`)}
+
                         />
                         <OpenGate
                             width={30}

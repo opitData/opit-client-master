@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     StatusBar,
     SafeAreaView,
@@ -53,6 +53,11 @@ import AddUsers from '../components/settings/administratorPrivileges/AddUsers';
 import SerialNumber from '../components/signUp/SerialNumber';
 import CarDetailsForm from '../components/carsDetailsForm/CarsDetailsForm'
 import GateMain from '../components/gate/GateMain';
+import { ImageBackground } from "react-native";
+import AddAnotherCar from '../components/carsDetailsForm/AddAnotherCar';
+
+
+const image = require('../assets/png/bgOpening.png');
 
 const Stack = createNativeStackNavigator();
 
@@ -75,6 +80,18 @@ const addStaticBackground = (props, Component) => {
         </>
     )
 }
+
+// const addOpeningBackground = (props, Component) => {
+//     return (
+//         <>
+//             <SafeAreaView>
+//                 <ImageBackground source={image} resizeMode="cover" style={styles.bgImage}>
+//                     <Component {...props} />
+//                 </ImageBackground>
+//             </SafeAreaView>
+//         </>
+//     )
+// }
 
 
 export const RoutesApp = (props) => {
@@ -260,7 +277,7 @@ export const Routes = () => {
 
 
                     <Stack.Screen
-                        name="Registration"
+                        name="CarsDetailsForm"
                         component={
                             (props) => addStaticBackground(props, CarsDetailsForm)
                         }
@@ -271,6 +288,13 @@ export const Routes = () => {
                         name="WrapSettings"
                         component={
                             (props) => addStaticBackground(props, WrapSettings)
+                        }
+                    />
+
+                    <Stack.Screen
+                        name="AddAnotherCar"
+                        component={
+                            (props) => addStaticBackground(props, AddAnotherCar)
                         }
                     />
 

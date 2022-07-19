@@ -36,6 +36,8 @@ import ErrorMessage from '../formik/ErrorValidation';
 import { validationSchema } from '../formik/Schema';
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
+import PlusComp from '../../assets/svg/Plus';
+import CarDetailsDialog from '../dialog/CarDetails.dialog';
 
 // import * as yup from 'yup'
 
@@ -62,11 +64,12 @@ function CarsDetailsFormik(props) {
     const scrollViewRef = useRef();
     const inputsRef = useRef([]);
     const toast = useToast()
-    const [countNumParking, setCountNumParking] = useState(0);
+    const [countNumParking, setCountNumParking] = useState(1);
     const [progressAddNewCar, setProgressAddNewCar] = useState(false);
     const usersLink = "http://10.0.0.3:8000/users/";
     const [isNoCar, setNoCar] = useState(false);
     const [roofedParking, setRoofedParking] = useState(false);
+    const [showAuthDialog, setAuthDialog] = useState(false);
 
     const setCheckBoxFunc = () => {
         setCheckBox(!checkBox)
@@ -88,7 +91,7 @@ function CarsDetailsFormik(props) {
             var data = await axios.post(usersLink, {
                 name: formValues.firstName + " " + formValues.lastName,
                 email: formValues.email,
-                phone: "0546670834",
+                phone: formValues.phone,
                 veihcles_ids: [formValues.carNum],
                 assets_ids: [props.route.params]
             })
@@ -98,7 +101,7 @@ function CarsDetailsFormik(props) {
                     'name',
                     data.name
                 );
-                console.log(`*********************************** save on stroage ${data.name} **********************`)
+                console.log(`save on stroage ${data.name}`)
             } catch (error) {
                 console.log("Errorr stroage set ")
                 //Error saving data
@@ -117,6 +120,7 @@ function CarsDetailsFormik(props) {
         catch (err) {
             console.log(err);
         }
+
         navigateScreen(props, 'AuthCarDetailsBeforeContinue', formValues)
     }
 
@@ -126,22 +130,23 @@ function CarsDetailsFormik(props) {
     }
 
     const deleteCarFunc = async (item) => {
+        setCountNumParking(countNumParking => countNumParking - 1);
         setFormValuesFunc("parkings", formValues.parkings.filter(park => park.index != item.index))
     };
 
     const addNewCar = () => {
-
+        navigateScreen(props, 'AddAnotherCar')
         //loading animation
-        setProgressAddNewCar(true);
-        _addCar(formValues);
-        _setCountNumCars(_countNumCars + 1);
+        // setProgressAddNewCar(true);
+        // _addCar(formValues);
+        // _setCountNumCars(_countNumCars + 1);
 
-        //loading animation and clear textInputs
-        setTimeout(() => {
-            setProgressAddNewCar(false);
-            setFormValues(new Car(_countNumCars + 1));
-            ToastService.showSystemToast(toast, 'Car added successfull')
-        }, 1500);
+        // //loading animation and clear textInputs
+        // setTimeout(() => {
+        //     setProgressAddNewCar(false);
+        //     setFormValues(new Car(_countNumCars + 1));
+        //     ToastService.showSystemToast(toast, 'הרכב נוסף בהצלחה!')
+        // }, 1500);
 
     }
 
@@ -168,11 +173,12 @@ function CarsDetailsFormik(props) {
                                     colors={[dominant, dominantDark]}
                                     style={[_styles().linearGradientBtn, _styles().iconPlus]}
                                 >
-                                    <AntDesign
+                                    {/* <AntDesign
                                         name="plus"
                                         color="white"
                                         size={20}
-                                    />
+                                    /> */}
+                                    <PlusComp></PlusComp>
                                 </LinearGradient>
                             </TouchableOpacity>
 
@@ -202,6 +208,7 @@ function CarsDetailsFormik(props) {
                     firstName: '',
                     lastName: '',
                     email: '',
+                    phone: '',
                     apartmentNum: '',
                     carKind: '',
                     carNum: '',
@@ -275,6 +282,15 @@ function CarsDetailsFormik(props) {
                             placeholderTextColor={'#FFFFFF99'}
                             selectionColor="#FFFFFF99"
                             ref={el => inputsRef[2] = el}
+                        />
+                        <TextInput
+                            onChangeText={(txt) => setFormValuesFunc('phone', txt)}
+                            value={formValues.phone}
+                            style={styles.input}
+                            placeholder={t(`${form}.phone`)}
+                            placeholderTextColor={'#FFFFFF99'}
+                            selectionColor="#FFFFFF99"
+                            ref={el => inputsRef[8] = el}
                         />
                         <View style={[styles.rowDirection, { justifyContent: 'flex-end' }]}>
                             {!isNoCar && <View style={[{ width: '60%' }]}>
@@ -410,6 +426,10 @@ function CarsDetailsFormik(props) {
 
                 )}
             </Formik>
+            <CarDetailsDialog
+                visible={showAuthDialog}
+                setVisible={setAuthDialog}
+            />
         </>
     )
 }

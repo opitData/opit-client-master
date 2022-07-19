@@ -40,7 +40,7 @@ function AddAnotherCar(props) {
             <Header
                 {...props}
                 headerRightElement={
-                    <TouchableOpacity onPress={() => navigateScreen(props, 'Auth1')}>
+                    <TouchableOpacity onPress={() => navigateScreen(props, 'SerialNumber')}>
                         <ArrowBack />
                     </TouchableOpacity>
                 }

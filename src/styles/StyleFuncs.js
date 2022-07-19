@@ -17,6 +17,15 @@ class StyleFuncs {
         }
     }
 
+    returnDarkBg(width, height) {
+        return {
+            backgroundColor: dark,
+            height: height ? height : 70,
+            width: width ? width : '95%',
+            borderRadius: 10
+        }
+    }
+
     returnDarkBtnStyleNoMargin(width, height) {
         return {
             backgroundColor: dark,

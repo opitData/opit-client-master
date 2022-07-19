@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../header/Header';
 import {
   PixelRatio,
@@ -26,12 +26,19 @@ import { connect } from 'react-redux';
 import actions from '../../redux/actions';
 import { returnTitle } from '../genericComponents/GenericFunctions';
 import T from '../genericComponents/T';
+import { AsyncStorage } from 'react-native';
+import axios from 'axios';
+
+
+
 function Home(props) {
   const { _propertiesList, _emptyParkingList, _tab, _setTab } = props;
   const { t, i18n } = useTranslation();
   const home = 'home'.toString();
   const [activeDailyParking, setActiveDailyParking] = useState(false);
   const [activeHourlyParking, setActiveHourlyParking] = useState(false);
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState([]);
   let dropDownArr = [
     {
       index: 0,
@@ -49,6 +56,13 @@ function Home(props) {
   const activeDailyParkingFunc = () => {
     setActiveDailyParking(!activeDailyParking);
   };
+
+  useEffect(async () => {
+    AsyncStorage.getItem('address').then((address) => setAddress([{ "index": 0, "item": address }]))
+    AsyncStorage.getItem('name').then((name) => setName(name))
+
+  }, [])
+
   return (
     <>
       <Header
@@ -64,13 +78,13 @@ function Home(props) {
             style={headerWithTitle()}
             numberOfLines={1}
             fontSize={25}
-            text={returnTitle() + ' נועם '}
+            text={returnTitle() + " " + name}
           />
         }
       />
       <ScrollView>
         <View style={{ paddingTop: 10 }}>
-          <DropDown array={_propertiesList} txtNote={true} />
+          <DropDown array={address} txtNote={true} />
         </View>
         <TouchableOpacity
           onPress={() => {

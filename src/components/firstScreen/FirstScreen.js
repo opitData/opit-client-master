@@ -13,7 +13,6 @@ import { navigateScreen } from '../../routes/routes';
 import { AsyncStorage } from 'react-native';
 
 function FirstScreen(props) {
-    const userURL = 'https://10.0.0.3:8000/users'
 
     // useEffect(async () => {
     //     try {
@@ -26,8 +25,22 @@ function FirstScreen(props) {
     //     }
     // }, [])
 
+    // const clear =  () => {
+    //     console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    //     try {
+    //          AsyncStorage.setItem('phone', null);
+    //         console.log("WORK!*************************************")
+    //         AsyncStorage.setItem('name', null);
+    //     }
+    //     catch (error) {
+    //         console.log("Errorr stroage set ")
+    //         //Error saving data
+    //     }
+    // }
     useEffect(() => {
-        AsyncStorage.getItem('phone').then((value) => {
+        // clear()
+        // AsyncStorage.clear()
+       AsyncStorage.getItem('phone').then((value) => {
             if ((value != null) && (value != undefined)) {
                 navigateScreen(props, 'WrapHome');
             }
@@ -37,17 +50,11 @@ function FirstScreen(props) {
         });
     }, [])
 
-    // axios({
-    //     method: 'get',
-    //     url: userURL,
-    // }).then((response) => {
-    //     console.log(response.data);
-    // });
     return (
         < SafeAreaView style={styles.background} >
             <View style={[styles.placeCenter, _styles.center]}>
                 <FrameIcon />
-                <Line />
+
             </View>
         </SafeAreaView >
 

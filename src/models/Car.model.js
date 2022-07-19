@@ -5,6 +5,7 @@ export const Car = (_id = 0) => {
             firstName: '',
             lastName: '',
             email: '',
+            phone: '',
             apartmentNum: '',
             carKind: '',
             carNum: '',

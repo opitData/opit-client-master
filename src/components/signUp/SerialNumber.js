@@ -22,6 +22,12 @@ import {
 } from '../../i18/languageList';
 import SystemAlert2Dialog from '../dialog/SystemAlert2.dialog';
 import GateOpenSuccessDialog from '../dialog/GateOpenSuccess.dialog';
+import { AsyncStorage } from 'react-native';
+import DeleteCarDialog from '../dialog/DeleteCar.dialog';
+import DeleteCar2Dialog from '../dialog/DeleteCar2.dialog';
+import OopsProblemDialog from '../dialog/OopsProblem.dialog';
+import OopsProblem2Dialog from '../dialog/OopsProblem2.dialog';
+import OopsProblem3Dialog from '../dialog/OopsProblem3.dialog';
 
 export default (props) => {
 
@@ -46,7 +52,17 @@ export default (props) => {
         let res = await axios.get(assetsLink)
         let assets = res.data
         assets.forEach((a) => { if (a.serial_number == codeNum) asset = a })
-        asset != undefined ? navigateScreen(props, 'Registration', asset.address) : setCodeProblemDialog(true)
+        if (asset != undefined) {
+            try {
+                await AsyncStorage.setItem('address', asset.address);
+            }
+            catch (error) {
+                console.log("Errorr stroage set ")
+                //Error saving data
+            }
+            navigateScreen(props, 'CarsDetailsForm', asset.address)
+        }
+        else setCodeProblemDialog(true)
     }
 
     // KZvV6Hv3
@@ -106,11 +122,10 @@ export default (props) => {
                 </View>
             </View>
 
-            <SystemAlert2Dialog
+            <OopsProblemDialog
                 visible={codeProblemDialog}
                 setVisible={setCodeProblemDialog}
             />
-
         </>
 
     )

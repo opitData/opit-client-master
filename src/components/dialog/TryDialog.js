@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import UnableToOpenGateDialog from './ UnableToOpenGate.dialog';
+import UnableToOpenGateDialog from './UnableToOpenGate.dialog';
 import GateOpenSuccessDialog from './GateOpenSuccess.dialog';
 import DeleteParkingDialog from './DeleteParking.dialog';
 import ParkingPermitDialog from './ParkingPermit.dialog';

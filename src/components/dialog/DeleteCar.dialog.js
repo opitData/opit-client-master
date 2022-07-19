@@ -51,6 +51,14 @@ export default (props) => {
                     body: t(`${deleteCar}.submit`),
                     width: 130,
                     size: 'large'
+                },
+                {
+                    handlePress: async () => {
+                        await setVisible(false);
+                    },
+                    body: t(`${deleteCar}.cancel`),
+                    width: 130,
+                    size: 'large'
                 }
             ]}
         />

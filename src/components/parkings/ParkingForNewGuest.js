@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { connect, useSelector } from 'react-redux';
-import DeleteCarDialog from '../dialog/DeleteCar.dialog';
 import {
     FlatList,
     Modal,
@@ -27,12 +26,14 @@ import Star from '../../assets/svg/star.svg'
 import T from '../genericComponents/T';
 import axios from 'axios';
 import { AsyncStorage } from 'react-native'
+import SystemWarningDialog from '../dialog/SystemWarning.dialog';
 
 function ParkingForNewGuest(props) {
     const { t } = useTranslation();
     const txt1 = 'parkingForNewGuest'.toString();
     const txt2 = 'reservedParkingsList'.toString();
     const emptyParking = 'emptyParkings'.toString();
+    const [guestsWarn, setGuestsWarn] = useState(false);
     const gateLink = "http://10.0.0.3:8000/GateOperation/";
     const usersLink = "http://10.0.0.3:8000/users/";
     const [carNumber, setCarNumber] = useState("")
@@ -62,9 +63,8 @@ function ParkingForNewGuest(props) {
         let req_end_time = _parkingRequest.endTime
 
         const d = new Date();
-        console.log(d.getDate() + _parkingRequest.day);
-        let date1 = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate() + _parkingRequest.day, req_start_time, '00', '00'))
-        let date2 = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), req_end_time, '00', '00'))
+        let date1 = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate() + _parkingRequest.day - 2, req_start_time - 3, '00', '00'))
+        let date2 = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate() + _parkingRequest.day - 2, req_end_time - 3, '00', '00'))
         let timeStamp1 = date1.getTime() / 1000;
         let timeStamp2 = date2.getTime() / 1000;
 
@@ -75,17 +75,29 @@ function ParkingForNewGuest(props) {
         };
 
         const PHONE = await AsyncStorage.getItem('phone');
-        let res = await axios.post(usersLink);
+        let res = await axios.get(usersLink);
         let users = res.data
         users.forEach(async (user) => {
             if (user.phone == PHONE) {
                 let guests = user.guests
-                guests.push(carNumber);
-                await axios.put(usersLink + user._id, { ...user, guests: guests })
+                let messages = user.messages
+                if (guests.length < 8) {
+                    if (guests.length == 6)
+                        messages.push({ title: "מכסת אורחים", mes: "שים לב, מותר לך להכניס עוד אורח אחד החודש", date: GetDate(), time: GetTime() })
+                    guests.push(carNumber);
+                    await axios.put(usersLink + user._id, { ...user, messages: messages, guests: guests })
+                    await axios.post(gateLink, body);
+                    console.log("Done!", guests.length); //Dialog: אורח נוסף!
+                    setVisible(false)
+                }
+                else {
+                    console.log("Not"); //Dialog: מכסת האורחים החודשית נגמרה
+                    setVisible(false);
+                    setGuestsWarn(true);
+                }
             }
-        })
-        await axios.post(gateLink, body);
 
+        })
 
         //   let res = await axios.get(gateLink)
         //   let guestsList = res.data  
@@ -98,12 +110,33 @@ function ParkingForNewGuest(props) {
         //  else await axios.post(gateLink,[body]);
 
     }
+    const GetDate = () => {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        let mm = today.getMonth() + 1;
+        let dd = today.getDate();
+
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+
+        return dd + '/' + mm + '/' + yyyy
+    }
+
+    const GetTime = () => {
+        const today = new Date();
+        let time = today.toLocaleTimeString().split(":")
+        return time[0] + ":" + time[1]
+    }
+
 
     const buttons = <Row style={_styles().btnRow}>
+        {/* continue */}
         <Button
             content={t(`${txt1}.btn1`)}
             width={140}
-            handlePress={() => addGuest()}
+            handlePress={() => {
+                addGuest()
+            }}
 
         /* handlePress={() => {
              setVisible(false)
@@ -112,6 +145,7 @@ function ParkingForNewGuest(props) {
              
          }}*/
         />
+        {/* cancel */}
         <Button
             kind="outline"
             handlePress={() => setVisible(false)}
@@ -239,6 +273,8 @@ function ParkingForNewGuest(props) {
                     />
                 </View>
             </AnimatedView>
+
+
         </>
     )
 }

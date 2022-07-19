@@ -13,7 +13,7 @@ import T from '../genericComponents/T';
 import axios from 'axios';
 import StyleFuncs from '../../styles/StyleFuncs';
 import GateOpenSuccessDialog from '../dialog/GateOpenSuccess.dialog';
-import UnableToOpenGateDialog from '../dialog/ UnableToOpenGate.dialog';
+import UnableToOpenGateDialog from '../dialog/UnableToOpenGate.dialog';
 import { GatePic } from './GatePic';
 import Line from '../firstScreen/Line';
 import { View, AsyncStorage } from 'react-native';
@@ -37,37 +37,41 @@ export default (props) => {
     const closedCamContainer = 200;
     const openCam = 280;
 
-    let compHeight, cam1Height, cam2Height;
 
+    const getImageFront = () => {
 
-    const getPiID  = async () => {
-        let pi_id = ""
-        let res =  await axios.get(assetsLink)
-        let assets = res.data
-        AsyncStorage.getItem('phone').then(async (phone) => {
-            assets.forEach((asset) => asset.users.ids.forEach((user) => {if(user == phone) pi_id = asset.pi_id} ) )
-        })
-       // await axios.post(gateLink, pi_id)
-    //     try {
-    //         var data = await axios.get(gateLink);
-    //         ToastAndroid.show("NEW" + data.data.message, 10);
-    //     }
-    //     catch (err) {
-    //         console.log(err);
-    //         ToastAndroid.show("err", 4);
-    //     }
+    }
+    const getImageBack = () => {
 
-         // ToastAndroid.show('asdf sdf asdf', 4);
+    }
+    const openGate = async () => {
+        try {
+            var data = await axios.get(gateLink);
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
-    {/* <Image
-                    source={Gate1}
-                    style={[_styles().image]}
-                /> */}
-    {/* <Image
-                    source={Gate2}
-                    style={[_styles().image]}
-                /> */}
+    const getPiID = async () => {
+        let pi_id = ""
+        let res = await axios.get(assetsLink)
+        let assets = res.data
+        AsyncStorage.getItem('phone').then(async (phone) => {
+            assets.forEach((asset) => asset.users.ids.forEach((user) => { if (user == phone) pi_id = asset.pi_id }))
+        })
+        // await axios.post(gateLink, pi_id)
+        //     try {
+        //         var data = await axios.get(gateLink);
+        //         ToastAndroid.show("NEW" + data.data.message, 10);
+        //     }
+        //     catch (err) {
+        //         console.log(err);
+        //         ToastAndroid.show("err", 4);
+        //     }
+
+        // ToastAndroid.show('asdf sdf asdf', 4);
+    }
 
     return (
         <>
@@ -87,11 +91,13 @@ export default (props) => {
                     />
 
 
-                    <TouchableOpacity style={[returnGrayButton('90%', isImage1Open ? openCam : '0%')]}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            getImageFront();
+                        }}
+                        style={[returnGrayButton('90%', isImage1Open ? openCam : '0%')]}>
                         <Image
-                          // source={{uri: 'https://reactjs.org/logo-og.png'}}
-
-                           source={{uri:'http://10.0.0.3:8000/gate/sendmeimg/124'}}
+                            source={{ uri: 'http://10.0.0.3:8000/gate/sendmeimg/124' }}
                             style={[_styles().image, { height: isImage1Open ? undefined : '0%' }]}
                         />
                         <Row style={[{ justifyContent: 'center', marginTop: 20 }]}>
@@ -105,11 +111,7 @@ export default (props) => {
                                 height={30}
                             />
                         </Row>
-                        {/* {setTimeout(() => {
-                            return <View style={[{ flex: 1 }]}>
-                                <Line />
-                            </View>
-                        }, 5000)} */}
+
 
                     </TouchableOpacity>
 
@@ -137,6 +139,87 @@ export default (props) => {
 
                     <TouchableOpacity style={[returnDarkBtn(), styles.placeCenter]}
                         onPress={() => {
+                            openGate()
+                            setOpenGateDialog(true);
+                        }}>
+                        <Row style={[styles.placeCenter]}>
+                            {/* {<Text style={[returnBoldTxt(20), { paddingHorizontal: 10 }]}>
+                            {t(`${txt}.btn2`)}
+                        </Text>} */}
+                            <T
+                                style={[returnBoldTxt(20), { paddingHorizontal: 10 }]}
+                                text={t(`${txt}.btn2`)}
+
+                            />
+                            <OpenGate
+                                width={30}
+                                height={30}
+                            />
+                        </Row>
+                    </TouchableOpacity>
+                </TouchableOpacity>
+
+
+                <TouchableOpacity
+                    disabled={true}
+                    style={[
+                        StyleFuncs.returnDarkBtnStyle('100%', isImage2Open ? openCamContainer : closedCamContainer), { justifyContent: 'flex-start' }
+                    ]}>
+                    <T
+                        style={[returnBoldTxt(40), { paddingHorizontal: 10, marginTop: 10 }]}
+                        text={t(`${txt}.backGate`)}
+                    />
+
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            getImageBack();
+                        }}
+                        style={[returnGrayButton('90%', isImage2Open ? openCam : '0%')]}>
+                        <Image
+                            source={{ uri: 'http://10.0.0.3:8000/gate/sendmeimg/124' }}
+                            style={[_styles().image, { height: isImage2Open ? undefined : '0%' }]}
+                        />
+                        <Row style={[{ justifyContent: 'center', marginTop: 20 }]}>
+
+                            <T
+                                style={[returnBoldTxt(isImage2Open ? 20 : 0), { paddingHorizontal: 10 }]}
+                                text={t(`${txt}.refreshBtn`)}
+                            />
+                            <Camera
+                                width={30}
+                                height={30}
+                            />
+                        </Row>
+
+
+                    </TouchableOpacity>
+
+
+                    {/* ///////////////////gray buttons */}
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            setImage2Open(true)
+                        }}
+                        style={[returnGrayButton('90%', isImage2Open ? '0%' : 50), styles.placeCenter]}>
+                        <Row style={[{ justifyContent: 'center' }]}>
+
+                            <T
+                                style={[returnBoldTxt(20), { paddingHorizontal: 10 }]}
+                                text={t(`${txt}.btn1`)}
+                            />
+                            <Camera
+                                width={30}
+                                height={isImage2Open ? '0%' : 30}
+                            />
+                        </Row>
+                    </TouchableOpacity>
+
+
+                    <TouchableOpacity style={[returnDarkBtn(), styles.placeCenter]}
+                        onPress={() => {
+                            openGate();
                             setOpenGateDialog(true);
                         }}>
                         <Row style={[styles.placeCenter]}>
@@ -155,60 +238,6 @@ export default (props) => {
                         </Row>
                     </TouchableOpacity>
 
-                </TouchableOpacity>
-
-
-
-
-
-
-
-                <TouchableOpacity
-                    disabled={true}
-                    style={[
-                        StyleFuncs.returnDarkBtnStyle('100%', 200), { justifyContent: 'flex-start' }
-                    ]}>
-                    <T
-                        style={[returnBoldTxt(40), { paddingHorizontal: 10, marginTop: 10 }]}
-                        text={t(`${txt}.backGate`)}
-                    />
-                    <TouchableOpacity
-
-                        style={[returnDarkBtn(), styles.placeCenter]}>
-                        <Row style={[styles.placeCenter]}>
-                            {/* <Text style={[returnBoldTxt(20), { paddingHorizontal: 10 }]}>
-                            {t(`${txt}.btn1`)}
-                        </Text> */}
-                            <T
-                                style={[returnBoldTxt(20), { paddingHorizontal: 10 }]}
-                                text={t(`${txt}.btn1`)}
-                            />
-                            <Camera
-                                width={30}
-                                height={30}
-                            />
-                        </Row>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        onPress={() => {
-                            setOpenGateDialog(true);
-                        }} style={[returnDarkBtn(), styles.placeCenter]}>
-                        <Row style={[styles.placeCenter]}>
-                            {/* {<Text style={[returnBoldTxt(20), { paddingHorizontal: 10 }]}>
-                            {t(`${txt}.btn2`)}
-                        </Text>} */}
-                            <T
-                                style={[returnBoldTxt(20), { paddingHorizontal: 10 }]}
-                                text={t(`${txt}.btn2`)}
-
-                            />
-                            <OpenGate
-                                width={30}
-                                height={30}
-                            />
-                        </Row>
-                    </TouchableOpacity>
                 </TouchableOpacity>
             </ScrollView>
 

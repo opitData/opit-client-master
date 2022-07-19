@@ -64,6 +64,7 @@ export const He = {
             firstName: 'שם פרטי',
             lastName: 'שם משפחה',
             email: 'אימייל',
+            phone: 'מספר טלפון',
             apartmentNum: 'מספר דירה',
             phoneNumber: 'טלפון נייד',
             carKind: 'סוג הרכב',
@@ -148,7 +149,8 @@ export const He = {
         deleteCar: {
             title: 'האם ברצונך למחוק את הרכב?',
             details: 'לאחר המחיקה לא ניתן יהיה לשחזר את פרטי הרכב!',
-            submit: 'מחיקה'
+            submit: 'מחק',
+            cancel: 'ביטול'
         },
         footer: {
             tab1: 'הגדרות',
@@ -259,6 +261,25 @@ export const He = {
             details2: 'אינו בשימוש זמן רב , האם ברצונך למחוק רכב זה?',
             submit: 'אישור',
             cancel: 'ביטול'
+        },
+        carDetailsDialog: {
+            title: "פרטי הרכב נשמרו בהצלחה!",
+            continue: 'המשך'
+        },
+        oopsProblem: {
+            title: "אופס יש בעיה :(",
+            codeNotValid: 'קוד לא תקין, נא ליצור קשר עם ועד הבית',
+        },
+        oopsProblem2: {
+            title: "אופס מצאנו בעיה :(",
+            txt1: "החניה כבר רשומה במערכת ומשויכת לישראל ישראלי",
+            txt2: "במידה והחניה שלך, יש ליצור קשר עם וועד הבית",
+            back: "חזור"
+        },
+        oopsProblem3: {
+            title: "אופס מצאנו בעיה :(",
+            checkValid: "יש לוודא שמילאת את כל הפרטים",
+            checkValid2: "רק לאחר מילוי הפרטים יהיה ניתן להמשיך"
         },
         settings: {
             title: 'הגדרות',
@@ -504,7 +525,7 @@ export const He = {
             backGate: 'שער אחורי',
             refreshBtn: 'לחץ לרענון התמונה',
             btn1: 'לחץ כאן לקבלת תמונה',
-            btn2: 'פתיחת שער אחורי'
+            btn2: 'פתיחת שער'
         },
         messages: {
             title: 'הודעות'

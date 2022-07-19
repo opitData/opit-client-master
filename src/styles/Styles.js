@@ -91,6 +91,12 @@ export default StyleSheet.create({
     headerText: {
 
     },
+    bgImage: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        justifyContent: "center"
+    },
     // headerWithTitle: {
     //     color: ligth,
     //     fontStyle: 'normal',
